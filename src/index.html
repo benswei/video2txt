@@ -9,21 +9,21 @@
 <body>
     <!-- 🎛️ 自定义原生标题栏 -->
     <div id="app-titlebar" class="app-titlebar" data-tauri-drag-region>
-        <div class="mac-controls">
-            <div class="mac-btn close" id="mac-close" title="关闭"></div>
-            <div class="mac-btn minimize" id="mac-min" title="最小化"></div>
-            <div class="mac-btn maximize" id="mac-max" title="最大化"></div>
+        <div class="mac-controls" data-tauri-no-drag>
+            <div class="mac-btn close" id="mac-close" title="关闭" data-tauri-no-drag></div>
+            <div class="mac-btn minimize" id="mac-min" title="最小化" data-tauri-no-drag></div>
+            <div class="mac-btn maximize" id="mac-max" title="最大化" data-tauri-no-drag></div>
         </div>
         <div class="titlebar-logo" data-tauri-drag-region>🎙️ Video2Txt 语音转文字与文档优化工具</div>
-        <div class="win-controls">
-            <div class="win-btn minimize" id="win-min" title="最小化">
-                <svg width="10" height="1" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+        <div class="win-controls" data-tauri-no-drag>
+            <div class="win-btn minimize" id="win-min" title="最小化" data-tauri-no-drag>
+                <svg width="10" height="1" viewBox="0 0 10 1" data-tauri-no-drag><rect width="10" height="1" fill="currentColor"/></svg>
             </div>
-            <div class="win-btn maximize" id="win-max" title="最大化">
-                <svg width="10" height="10" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+            <div class="win-btn maximize" id="win-max" title="最大化" data-tauri-no-drag>
+                <svg width="10" height="10" viewBox="0 0 10 10" data-tauri-no-drag><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/></svg>
             </div>
-            <div class="win-btn close" id="win-close" title="关闭">
-                <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1"/></svg>
+            <div class="win-btn close" id="win-close" title="关闭" data-tauri-no-drag>
+                <svg width="10" height="10" viewBox="0 0 10 10" data-tauri-no-drag><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1"/></svg>
             </div>
         </div>
     </div>
@@ -57,6 +57,7 @@
                 <span id="dep-ffmpeg" class="dep-status loading">检测中...</span>
                 <span id="dep-bili" class="dep-status loading">B站检测中...</span>
                 <span id="dep-youtube" class="dep-status loading">YouTube检测中...</span>
+                <button id="btn-dep-guide-trigger" class="btn-secondary btn-sm hidden" style="margin-left: 10px; padding: 2px 8px; font-size: 11px; cursor: pointer; color: var(--warning-color); border-color: var(--warning-color); font-weight: bold; background: rgba(245,158,11,0.1);">🛠️ 依赖安装修复指引</button>
             </div>
 
             <!-- 主面板容器 -->
@@ -616,6 +617,59 @@
                 </div>
                 <div id="log-box" class="log-box" style="height: 50vh; overflow-y: auto; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-family: monospace; font-size: 11px; white-space: pre-wrap; line-height: 1.4;">
                     <div class="log-placeholder">等待任务启动...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🛠️ 依赖安装引导弹窗 -->
+    <div id="dep-guide-modal" class="modal-overlay-panel">
+        <div class="modal-content-wrapper glass" style="max-width: 650px; width: 90%;">
+            <div class="modal-header-row" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:15px;">
+                <h2 style="margin:0; font-size:16px;">🛠️ Python & FFmpeg 国内极速安装修复指引</h2>
+                <button class="modal-close-btn" id="btn-close-dep-guide" style="font-size:24px; font-weight:bold; background:none; border:none; color:var(--text-muted); cursor:pointer;">&times;</button>
+            </div>
+            <div class="dep-guide-content" style="max-height: 55vh; overflow-y: auto; display:flex; flex-direction:column; gap:16px; font-size:13px; line-height:1.6; padding-right:5px;">
+                
+                <!-- Python Guide -->
+                <div class="guide-section-card" style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+                    <h3 style="margin:0 0 8px 0; font-size:14px; color:#818cf8; display:flex; align-items:center; gap:6px;">🐍 1. 安装 Python 环境</h3>
+                    <p style="margin:0 0 8px 0; color:var(--text-secondary);">本软件核心转录引擎依赖 Python 3.10+ 环境。部分电脑未检测到 Python，请按以下步骤安装：</p>
+                    <div style="display:flex; flex-direction:column; gap:6px; background:rgba(0,0,0,0.15); padding:10px; border-radius:8px;">
+                        <div>
+                            <strong>Windows 10/11 国内极速免代理直链：</strong><br>
+                            <a href="#" onclick="window.openFile('https://mirrors.huaweicloud.com/python/3.10.11/python-3.10.11-amd64.exe'); return false;" style="color:var(--primary-color); text-decoration:underline; font-weight:bold;">🚀 华为云 Python 3.10.11 一键下载</a>
+                        </div>
+                        <div style="color:#fca5a5; font-weight:600; margin-top:4px;">
+                            🚨 极其重要注意事项：<br>
+                            运行下载的安装包时，必须在第一步勾选最下方的 “[√] Add Python 3.10 to PATH”（将其加入系统环境变量），然后再点击 Install Now 安装！若未勾选，本软件仍将无法识别。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FFmpeg Guide -->
+                <div class="guide-section-card" style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
+                    <h3 style="margin:0 0 8px 0; font-size:14px; color:#818cf8; display:flex; align-items:center; gap:6px;">🎵 2. 安装 FFmpeg 音视频工具</h3>
+                    <p style="margin:0 0 8px 0; color:var(--text-secondary);">FFmpeg 用于视频和音频伴音的提取、格式转换等。若未找到，请按以下步骤配置：</p>
+                    <div style="display:flex; flex-direction:column; gap:8px; background:rgba(0,0,0,0.15); padding:10px; border-radius:8px;">
+                        <div>
+                            <strong>第一步：极速下载解压包（国内加速代理）：</strong><br>
+                            <a href="#" onclick="window.openFile('https://mirror.ghproxy.com/https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip'); return false;" style="color:var(--primary-color); text-decoration:underline; font-weight:bold;">🚀 FFmpeg Windows 极速解压包下载</a>
+                        </div>
+                        <div>
+                            <strong>第二步：解压并配置环境变量（Path）：</strong>
+                            <ol style="margin:4px 0 0 20px; padding:0; color:var(--text-secondary);">
+                                <li>下载后，将 `.zip` 压缩包解压到一个固定的英文路径下（例如解压到 <code>D:\\ffmpeg</code>）。</li>
+                                <li>解压后确认存在 <code>D:\\ffmpeg\\bin\\ffmpeg.exe</code> 文件。</li>
+                                <li>在 Windows 搜索框中搜索“环境变量”，打开“编辑系统环境变量” -> 点击“环境变量”按钮。</li>
+                                <li>在“系统变量”列表中找到 <code>Path</code>，双击编辑它，点击“新建”，将 <code>D:\\ffmpeg\\bin</code> 填入并保存退出。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="color:var(--text-muted); font-size:11px; text-align:center;">
+                    配置完成后，双击主界面上方的“环境依赖检测”横幅，即可重新检测状态。
                 </div>
             </div>
         </div>

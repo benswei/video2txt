@@ -370,6 +370,7 @@ const depBili = document.getElementById('dep-bili');
 const depYoutube = document.getElementById('dep-youtube');
 
 async function checkDependencies() {
+    const btnGuide = document.getElementById('btn-dep-guide-trigger');
     const cached = localStorage.getItem('video2txt_dep_checked');
     if (cached) {
         try {
@@ -379,6 +380,7 @@ async function checkDependencies() {
                 depPython.className = 'dep-status installed';
                 depFfmpeg.textContent = 'FFmpeg 已安装';
                 depFfmpeg.className = 'dep-status installed';
+                btnGuide?.classList.add('hidden');
                 validateAllInputs();
                 return;
             }
@@ -409,6 +411,12 @@ async function checkDependencies() {
             depFfmpeg.textContent = 'FFmpeg 未找到';
             depFfmpeg.className = 'dep-status missing';
             appendLog('❌ 未找到 FFmpeg，音视频转码功能将不可用。', 'error');
+        }
+
+        if (!hasPython || !hasFfmpeg) {
+            btnGuide?.classList.remove('hidden');
+        } else {
+            btnGuide?.classList.add('hidden');
         }
 
         if (hasPython) {
@@ -1452,6 +1460,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsModal = document.getElementById('settings-modal');
     const historyModal = document.getElementById('history-modal');
     const debugLogsModal = document.getElementById('debug-logs-modal');
+    const depGuideModal = document.getElementById('dep-guide-modal');
     
     document.getElementById('btn-settings-trigger')?.addEventListener('click', () => {
         loadConfig();
@@ -1463,12 +1472,17 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHistory();
         historyModal.classList.add('active');
     });
+
+    document.getElementById('btn-dep-guide-trigger')?.addEventListener('click', () => {
+        depGuideModal.classList.add('active');
+    });
     
     document.getElementById('btn-close-settings')?.addEventListener('click', () => settingsModal.classList.remove('active'));
     document.getElementById('btn-close-history')?.addEventListener('click', () => historyModal.classList.remove('active'));
     document.getElementById('btn-close-debug-logs')?.addEventListener('click', () => debugLogsModal.classList.remove('active'));
+    document.getElementById('btn-close-dep-guide')?.addEventListener('click', () => depGuideModal.classList.remove('active'));
     
-    [settingsModal, historyModal, debugLogsModal].forEach(modal => {
+    [settingsModal, historyModal, debugLogsModal, depGuideModal].forEach(modal => {
         modal?.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
         });
