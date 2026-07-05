@@ -28,8 +28,7 @@
         </div>
     </div>
 
-    <div class="main-layout">
-        <div class="app-container">
+    <div class="app-container">
             <!-- 头部标题 -->
             <header>
                 <div class="logo">🎙️</div>
@@ -63,23 +62,20 @@
             <!-- 主面板容器 -->
             <main class="tab-panels-container">
                  <!-- Tab 1: 在线转文字 -->
-                <div id="panel-online-transcribe" class="tab-panel active glass" style="padding: 14px;">
+                <div id="panel-online-transcribe" class="tab-panel active glass">
                     <div class="new-task-grid">
                         <!-- 左栏：在线链接输入 -->
-                        <div class="new-task-column source-column" style="display: flex; flex-direction: column; justify-content: stretch; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-                                <h2>1. 输入在线视频链接</h2>
-                                <div class="url-box" style="flex: 1; display: flex; flex-direction: column; min-height: 0; margin-top: 10px;">
-                                    <label for="url-input" style="font-size: 11px; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px;">支持多行批量输入，每行一个链接</label>
-                                    <textarea id="url-input" placeholder="https://www.bilibili.com/video/BV...&#10;https://www.youtube.com/watch?v=...&#10;支持 YouTube/B站 等 1000+ 在线平台，每行输入一个链接..." style="width:100%; flex: 1; min-height: 160px; background:rgba(0,0,0,0.2); color:var(--text-primary); border:1px solid var(--border-color); border-radius:8px; padding:8px; font-size:12px; font-family:inherit; resize:none; line-height: 1.5; outline: none;"></textarea>
-                                </div>
+                        <div class="new-task-column source-column">
+                            <h2>1. 输入在线视频链接</h2>
+                            <div class="url-box" style="flex: 1; display: flex; flex-direction: column; min-height: 0; margin-top: 10px; border: 2px dashed var(--border-color); border-radius: 12px; padding: 12px;">
+                                <label for="url-input" style="font-size: 11px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px;">支持多行批量输入，每行一个链接</label>
+                                <textarea id="url-input" placeholder="https://www.bilibili.com/video/BV...&#10;https://www.youtube.com/watch?v=...&#10;支持 YouTube/B站 等 1000+ 在线平台，每行输入一个链接..." style="width:100%; flex: 1; background: transparent; color:var(--text-primary); border: none; border-radius: 8px; padding: 0; font-size:12px; font-family:inherit; resize:none; line-height: 1.5; outline: none;"></textarea>
                             </div>
                         </div>
 
                         <!-- 右栏：配置与开始按钮 -->
-                        <div class="new-task-column config-column" style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px;">
-                                <h2>2. 转录配置</h2>
+                        <div class="new-task-column config-column" style="overflow-y: auto;">
+                            <h2>2. 转录配置</h2>
 
                                 <!-- 引擎选择 -->
                                 <div class="config-item">
@@ -136,7 +132,7 @@
                             </div>
 
                             <!-- 触发按钮 -->
-                            <button id="start-online-btn" class="btn-primary" disabled style="width: 100%; margin-top: 10px; padding: 10px 20px; font-size: 13px; border-radius: 8px;">
+                            <button id="start-online-btn" class="btn-primary" disabled style="width: 100%; margin-top: 12px; padding: 10px 20px; font-size: 13px; border-radius: 8px; flex-shrink: 0;">
                                 <span class="btn-text">开始转写</span>
                                 <span class="btn-glow"></span>
                             </button>
@@ -145,12 +141,11 @@
                 </div>
 
                 <!-- Tab 2: 本地转文字 -->
-                <div id="panel-local-transcribe" class="tab-panel glass" style="padding: 14px;">
+                <div id="panel-local-transcribe" class="tab-panel glass">
                     <div class="new-task-grid">
-                        <!-- 左栏：本地拖拽上传 -->
-                        <div class="new-task-column source-column" style="display: flex; flex-direction: column; justify-content: stretch; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-                                <h2>1. 选择本地音视频源</h2>
+                        <!-- 左栏：本地文件选择 -->
+                        <div class="new-task-column source-column">
+                            <h2>1. 选择本地音视频源</h2>
                                 <div id="drop-zone" class="upload-box" style="position: relative; flex: 1; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 12px 10px; margin-top: 10px;">
                                     <div class="upload-icon" style="font-size: 28px; margin-bottom: 4px;">📁</div>
                                     <p class="upload-text" style="font-size: 12px; font-weight: 500;">点击或将本地文件/文件夹拖拽到此处</p>
@@ -173,9 +168,8 @@
                         </div>
 
                         <!-- 右栏：配置与开始按钮 -->
-                        <div class="new-task-column config-column" style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px;">
-                                <h2>2. 转录配置</h2>
+                        <div class="new-task-column config-column" style="overflow-y: auto;">
+                            <h2>2. 转录配置</h2>
 
                                 <!-- 引擎选择 -->
                                 <div class="config-item">
@@ -224,7 +218,7 @@
                             </div>
 
                             <!-- 触发按钮 -->
-                            <button id="start-local-btn" class="btn-primary" disabled style="width: 100%; margin-top: 10px; padding: 10px 20px; font-size: 13px; border-radius: 8px;">
+                            <button id="start-local-btn" class="btn-primary" disabled style="width: 100%; margin-top: 12px; padding: 10px 20px; font-size: 13px; border-radius: 8px; flex-shrink: 0;">
                                 <span class="btn-text">开始转写</span>
                                 <span class="btn-glow"></span>
                             </button>
@@ -233,12 +227,11 @@
                 </div>
 
                 <!-- Tab 3: 优化转Markdown -->
-                <div id="panel-optimize-markdown" class="tab-panel glass" style="padding: 14px;">
+                <div id="panel-optimize-markdown" class="tab-panel glass">
                     <div class="new-task-grid">
                         <!-- 左栏：文件选择 -->
-                        <div class="new-task-column source-column" style="display: flex; flex-direction: column; justify-content: stretch; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-                                <h2>1. 选择要优化的文档</h2>
+                        <div class="new-task-column source-column">
+                            <h2>1. 选择要优化的文档</h2>
                                 <div id="md-drop-zone" class="upload-box" style="position: relative; flex: 1; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 12px 10px; margin-top: 10px;">
                                     <div class="upload-icon" style="font-size: 28px; margin-bottom: 4px;">📝</div>
                                     <p class="upload-text" style="font-size: 12px; font-weight: 500;">点击或将文本/PDF文件或文件夹拖拽到此处</p>
@@ -261,9 +254,8 @@
                         </div>
 
                         <!-- 右栏：配置选项 -->
-                        <div class="new-task-column config-column" style="display: flex; flex-direction: column; justify-content: space-between; flex: 1; min-height: 0;">
-                            <div class="panel-section" style="padding: 0; gap: 8px;">
-                                <h2>2. 优化配置</h2>
+                        <div class="new-task-column config-column" style="overflow-y: auto;">
+                            <h2>2. 优化配置</h2>
 
                                 <!-- 模型选择 -->
                                 <div class="config-item">

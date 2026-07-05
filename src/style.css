@@ -49,10 +49,10 @@ input, textarea, select, .previewer-content-body, .log-box, .log-box * {
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
-    background: rgba(10, 14, 28, 0.45); /* Semi-transparent for Mica/Vibrancy */
+    background: rgba(10, 14, 28, 0.45);
     color: var(--text-primary);
     height: 100vh;
-    padding-top: 32px; /* Allocate space for the titlebar */
+    padding-top: 32px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -80,11 +80,14 @@ body {
     flex: 1;
     min-width: 580px;
     max-width: 1240px;
-    min-height: 0; /* Prevent container from expanding beyond viewport */
-    padding: 10px;
+    width: 100%;
+    align-self: center;
+    min-height: 0;
+    padding: 10px 12px 12px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    overflow: hidden;
 }
 
 .glass {
@@ -267,22 +270,22 @@ header h1 {
     display: flex;
     position: relative;
     min-height: 0;
+    overflow: hidden;
 }
 
 .tab-panel {
-    width: 100%;
-    height: 100%;
-    padding: 12px 16px;
-    display: none; /* 默认隐藏 */
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    padding: 14px 16px;
+    display: none;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto;
-    min-height: 0;
+    overflow: hidden;
 }
 
 .tab-panel.active {
-    display: flex; /* 选中时显示 */
-    animation: panelFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    display: flex;
+    animation: panelFadeIn 0.25s ease-out forwards;
 }
 
 @keyframes panelFadeIn {
@@ -317,6 +320,21 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    flex: 1;
+    min-height: 0;
+}
+
+.new-task-column.source-column {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.new-task-column.config-column {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 10px;
 }
 
 .upload-box {
@@ -1534,13 +1552,11 @@ body.theme-light .divider-small {
     flex: 1;
     display: flex;
     flex-direction: row;
-    width: 100vw;
-    min-height: 0; /* Enforce flex constraints to prevent viewport overflow */
-    gap: 12px;
-    padding: 10px 12px 12px 12px;
+    min-height: 0;
+    gap: 0;
     justify-content: center;
     align-items: stretch;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
 .previewer-panel {
@@ -1948,12 +1964,13 @@ body.os-windows .titlebar-logo { text-align: left; padding-left: 10px; }
     flex: 1;
     width: 100%;
     min-height: 0;
+    overflow: hidden;
 }
 .new-task-column {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    flex: 1;
+    overflow: hidden;
 }
 
 /* ─── 浅色模式特定元素兼容调整 ─── */
@@ -2275,5 +2292,197 @@ body.theme-light .modal-overlay-panel {
     pointer-events: none !important;
 }
 
+/* ─── 设置卡片标题 — 统一蓝色 ─── */
+.settings-group-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color) !important;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 6px;
+    margin: 0;
+}
 
+/* 浅色模式下设置卡片 */
+body.theme-light .settings-group-card {
+    background: rgba(248, 250, 252, 0.8) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
 
+body.theme-light .settings-group-card h3 {
+    color: #2563eb !important;
+    border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+body.theme-light .settings-group-card h4 {
+    color: #475569 !important;
+}
+
+/* ─── 交互体验提升 ─── */
+.main-tab-btn {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.main-tab-btn:hover:not(.active) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary:not([disabled]):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+    filter: brightness(1.08);
+}
+
+.btn-primary:not([disabled]):active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    transform: translateY(-1px);
+}
+
+.btn-theme-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── 文件拖拽区域改进 ─── */
+.upload-box {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upload-box:hover {
+    transform: scale(1.005);
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
+}
+
+/* 浅色模式 upload-box */
+body.theme-light .upload-box {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    background: rgba(59, 130, 246, 0.02) !important;
+}
+
+body.theme-light .upload-box:hover {
+    border-color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.04) !important;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
+}
+
+/* ─── url-box 韴美化 ─── */
+body.theme-light .url-box {
+    border-color: rgba(0, 0, 0, 0.12) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ─── config-item select 和 input 改进 ─── */
+.config-item select,
+.config-item input[type="text"],
+.config-item input[type="password"] {
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.config-item select:hover,
+.config-item input:hover {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+/* ─── 历史记录条目悬停效果 ─── */
+.history-item {
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateX(2px);
+    border-color: var(--primary-color) !important;
+    background: rgba(59, 130, 246, 0.04) !important;
+}
+
+/* ─── 进度面板内文件条目动画 ─── */
+.output-file-item {
+    transition: all 0.2s ease;
+}
+
+.output-file-item:hover {
+    border-color: var(--primary-color) !important;
+    background: rgba(59, 130, 246, 0.05) !important;
+    transform: translateX(2px);
+}
+
+/* ─── dep-status 动画效果 ─── */
+.dep-status.installed {
+    animation: statusPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes statusPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── tab 切换动画优化 ─── */
+@keyframes panelFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── 模态弹出动画 ─── */
+@keyframes modalScale {
+    from { opacity: 0; transform: scale(0.94) translateY(-8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-content-wrapper {
+    animation: modalScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* ─── 转写开始按钮发光动画增强 ─── */
+.btn-primary:not([disabled]) .btn-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--primary-grad);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn-primary:not([disabled]):hover .btn-glow {
+    opacity: 0.15;
+    animation: btnPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.2; }
+}
+
+/* ─── 模态内滚动条优化 ─── */
+.settings-scroll-area::-webkit-scrollbar {
+    width: 4px;
+}
+
+.settings-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 2px;
+}
+
+/* ─── 浅色模式转写配置面板背景 ─── */
+body.theme-light .tab-panel.glass {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+body.theme-light .new-task-column.config-column {
+    background: transparent;
+}
+
+body.theme-light h2 {
+    color: #1e293b !important;
+    border-left-color: #3b82f6 !important;
+}
