@@ -192,7 +192,7 @@ const DEFAULT_CONFIG = {
     logDir: '',
     keepMedia: false,
     proxyUrl: '',
-    theme: 'dark',
+    theme: 'light',
     fontSize: '14px',
     cookiesFromBrowser: 'none',
     ytCookiesRaw: ''

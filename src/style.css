@@ -10,10 +10,10 @@
     --text-secondary: #9ca3af;
     --text-muted: #6b7280;
     
-    --primary-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --accent-color: #ec4899;
+    --primary-grad: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent-color: #0284c7;
     
     --success-color: #10b981;
     --error-color: #ef4444;
@@ -23,15 +23,15 @@
 
 body.theme-light {
     --bg-app: radial-gradient(circle at top left, #f8fafc 0%, #f1f5f9 100%);
-    --panel-bg: rgba(255, 255, 255, 0.45);
+    --panel-bg: rgba(255, 255, 255, 0.75);
     --border-color: rgba(0, 0, 0, 0.08);
     --text-primary: #0f172a;
-    --text-secondary: #475569;
+    --text-secondary: #334155;
     --text-muted: #64748b;
     
-    --primary-grad: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
+    --primary-grad: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
 }
 
 * {
@@ -80,7 +80,6 @@ body {
     flex: 1;
     min-width: 580px;
     max-width: 1240px;
-    height: 100%;
     min-height: 0; /* Prevent container from expanding beyond viewport */
     padding: 10px;
     display: flex;
@@ -111,7 +110,7 @@ header {
     background: var(--primary-grad);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.4));
+    filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.3));
 }
 
 header h1 {
@@ -258,7 +257,7 @@ header h1 {
 .main-tab-btn.active {
     color: #fff;
     background: var(--primary-grad);
-    box-shadow: 0 4px 15px 0 rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 15px 0 rgba(37, 99, 235, 0.2);
 }
 
 /* ─── Tab 面板容器 ───────────────────────────────────────── */
@@ -333,7 +332,7 @@ h2 {
 
 .upload-box:hover {
     border-color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.05);
+    background: rgba(37, 99, 235, 0.05);
 }
 
 .upload-box.dragover {
@@ -447,7 +446,7 @@ h2 {
 .url-box input:focus, .config-item input:focus, .config-item select:focus {
     border-color: var(--primary-color);
     background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.15);
 }
 
 .config-item select option {
@@ -540,12 +539,12 @@ h2 {
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -808,8 +807,8 @@ h2 {
 }
 
 .tab-btn.active {
-    background: rgba(99, 102, 241, 0.12);
-    border-color: rgba(99, 102, 241, 0.3);
+    background: rgba(37, 99, 235, 0.08);
+    border-color: rgba(37, 99, 235, 0.2);
     color: #818cf8;
 }
 
@@ -1120,7 +1119,7 @@ h2 {
 .output-file-card:hover {
     background: rgba(255, 255, 255, 0.06);
     border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
     transform: translateY(-1px);
 }
 
@@ -1199,17 +1198,17 @@ h2 {
 /* ─── 浅色主题模式 (Light Mode) ─── */
 
 body.theme-light {
-    --bg-app: radial-gradient(circle at top left, #f3f4f6 0%, #e5e7eb 100%);
-    --panel-bg: rgba(255, 255, 255, 0.45);
+    --bg-app: radial-gradient(circle at top left, #f8fafc 0%, #f1f5f9 100%);
+    --panel-bg: rgba(255, 255, 255, 0.75);
     --border-color: rgba(0, 0, 0, 0.08);
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
     
-    --primary-grad: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --accent-color: #db2777;
+    --primary-grad: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --accent-color: #0284c7;
     
     --success-color: #059669;
     --error-color: #dc2626;
@@ -1227,7 +1226,7 @@ body.theme-light .upload-box {
 }
 
 body.theme-light .upload-box:hover {
-    background: rgba(99, 102, 241, 0.05);
+    background: rgba(37, 99, 235, 0.04);
 }
 
 body.theme-light .selected-file-info {
@@ -1491,7 +1490,7 @@ body.theme-light .modal-header h3 {
 }
 
 body.theme-light .modal-section h4 {
-    color: #4f46e5 !important;
+    color: #2563eb !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
@@ -1513,8 +1512,8 @@ body.theme-light .config-item select {
 body.theme-light .config-item input:focus,
 body.theme-light .config-item select:focus {
     background: #ffffff !important;
-    border-color: #4f46e5 !important;
-    box-shadow: 0 0 8px rgba(79, 70, 229, 0.15) !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.15) !important;
 }
 
 body.theme-light .config-item select option {
@@ -1634,7 +1633,7 @@ body.theme-light .divider-small {
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
     transition: all 0.2s ease;
 }
 .btn-previewer-action:hover {
@@ -1713,7 +1712,7 @@ body.theme-light .divider-small {
 }
 .previewer-content-body blockquote {
     border-left: 4px solid var(--primary-color);
-    background: rgba(99, 102, 241, 0.05);
+    background: rgba(37, 99, 235, 0.04);
     padding: 10px 15px;
     margin: 1em 0;
     border-radius: 0 6px 6px 0;
@@ -1831,8 +1830,8 @@ body.theme-light .btn-file-open-sys:hover {
     transition: all 0.3s ease;
 }
 .settings-group-card:hover {
-    border-color: rgba(99, 102, 241, 0.25);
-    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.05);
+    border-color: rgba(37, 99, 235, 0.2);
+    box-shadow: 0 6px 24px rgba(37, 99, 235, 0.04);
 }
 .save-mode-group label {
     user-select: none;
@@ -2003,7 +2002,7 @@ body.theme-light .main-tab-btn.active {
     background: var(--primary-grad) !important;
     color: #ffffff !important;
     border-color: transparent;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 body.theme-light .main-tab-btn:hover:not(.active) {
@@ -2053,7 +2052,7 @@ body.theme-light .history-item {
 
 body.theme-light .history-item:hover {
     background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(79, 70, 229, 0.2);
+    border-color: rgba(59, 130, 246, 0.15);
 }
 
 body.theme-light .history-item-title {
@@ -2076,7 +2075,7 @@ body.theme-light .output-file-card {
 
 body.theme-light .output-file-card:hover {
     background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(79, 70, 229, 0.2);
+    border-color: rgba(59, 130, 246, 0.15);
 }
 
 body.theme-light .output-file-card-name {
@@ -2097,12 +2096,12 @@ body.theme-light .btn-file-folder:hover {
 }
 
 body.theme-light .settings-group-card {
-    background: rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
 }
 
 body.theme-light .settings-group-card:hover {
-    border-color: rgba(79, 70, 229, 0.25);
+    border-color: rgba(59, 130, 246, 0.25);
 }
 
 body.theme-light .btn-theme-toggle {
@@ -2195,6 +2194,17 @@ body.theme-light .win-btn:hover {
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-light .modal-content-wrapper {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .modal-overlay-panel.active .modal-content-wrapper {
