@@ -1,0 +1,24 @@
+{
+  "name": "video2txt",
+  "version": "1.0.0",
+  "description": "> AI 驱动的视频/音频转录工具。有字幕抓字幕，没字幕用 AI 听写——YouTube、B站、本地文件全支持。",
+  "main": "index.js",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gh-proxy.com/https://github.com/Jane-xiaoer/claude-skill-video-transcribe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

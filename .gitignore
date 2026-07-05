@@ -3,3 +3,21 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Dependency directories
+node_modules/
+
+# Build outputs, logs, and temp directories
+dist/
+Temp/
+Outputs/
+Logs/
+
+# Media and cookie files
+*.part
+*.mp4
+*.webm
+*.mp3
+youtube_cookies.txt
+bili_cookies.json
+
