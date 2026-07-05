@@ -809,7 +809,7 @@ h2 {
 .tab-btn.active {
     background: rgba(37, 99, 235, 0.08);
     border-color: rgba(37, 99, 235, 0.2);
-    color: #818cf8;
+    color: #3b82f6;
 }
 
 .tab-btn:hover:not(.active) {
@@ -973,7 +973,7 @@ h2 {
 .modal-section h4 {
     font-size: 13px;
     font-weight: 600;
-    color: #818cf8;
+    color: #3b82f6;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding-bottom: 6px;
 }
@@ -2269,6 +2269,10 @@ body.theme-light .template-item.active {
 }
 body.theme-light .modal-overlay-panel {
     background: rgba(0, 0, 0, 0.2);
+}
+
+.win-btn *, .mac-btn * {
+    pointer-events: none !important;
 }
 
 

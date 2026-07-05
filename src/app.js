@@ -1709,6 +1709,13 @@ document.body.classList.add(isMac ? 'os-macos' : 'os-windows');
 const appWindow = window.__TAURI__.window.getCurrentWindow();
 appWindow.setDecorations(false).catch(err => console.error("Failed to remove window decorations:", err));
 
+// Fallback dragging for custom titlebar
+document.getElementById('app-titlebar')?.addEventListener('mousedown', (e) => {
+    if (!e.target.closest('.win-controls') && !e.target.closest('.mac-controls')) {
+        appWindow.startDragging().catch(err => console.error("Failed to drag window:", err));
+    }
+});
+
 document.getElementById('win-min')?.addEventListener('click', () => appWindow.minimize());
 document.getElementById('win-max')?.addEventListener('click', async () => {
     if (await appWindow.isMaximized()) {
