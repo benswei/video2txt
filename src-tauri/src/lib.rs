@@ -176,6 +176,45 @@ fn select_multiple_files(app: tauri::AppHandle) -> Result<Option<Vec<String>>, S
     rx.recv().map_err(|e| e.to_string())
 }
 
+/// 批量选择多个本地文档文件
+#[tauri::command]
+fn select_document_files(app: tauri::AppHandle) -> Result<Option<Vec<String>>, String> {
+    let (tx, rx) = std::sync::mpsc::channel();
+    app.run_on_main_thread(move || {
+        let files = rfd::FileDialog::new()
+            .add_filter("文档文件", &["txt", "srt", "md", "pdf"])
+            .pick_files();
+        let paths = files.map(|list| list.into_iter().map(|p| p.to_string_lossy().to_string()).collect());
+        let _ = tx.send(paths);
+    }).map_err(|e| e.to_string())?;
+    rx.recv().map_err(|e| e.to_string())
+}
+
+/// 展开拖拽或选择的文件和目录，递归扫描所有有效文档文件
+#[tauri::command]
+fn expand_document_paths(paths: Vec<String>) -> Result<Vec<String>, String> {
+    let mut result = Vec::new();
+    let valid_exts = ["txt", "srt", "md", "pdf"];
+    
+    for path_str in paths {
+        let path = std::path::Path::new(&path_str);
+        if path.is_file() {
+            if let Some(ext) = path.extension().and_then(|s| s.to_str()) {
+                if valid_exts.contains(&ext.to_lowercase().as_str()) {
+                    result.push(path_str);
+                }
+            }
+        } else if path.is_dir() {
+            let mut files = Vec::new();
+            if let Err(e) = visit_dirs(path, &valid_exts, &mut files) {
+                return Err(format!("读取文件夹失败 {}: {}", path_str, e));
+            }
+            result.extend(files);
+        }
+    }
+    Ok(result)
+}
+
 /// 展开拖拽或选择的文件和目录，递归扫描所有有效媒体文件
 #[tauri::command]
 fn expand_paths(paths: Vec<String>) -> Result<Vec<String>, String> {
@@ -221,6 +260,7 @@ fn start_transcription(
     llm_api_url: String,
     llm_api_key: String,
     llm_model_name: String,
+    prompt_template: String,
 ) -> Result<(), String> {
     let script_path = find_transcribe_script(&app)
         .ok_or_else(|| "未找到 Tools/transcribe.py 脚本文件，请确保它存存放程序主目录下。".to_string())?;
@@ -304,6 +344,10 @@ fn start_transcription(
     if !llm_model_name.trim().is_empty() {
         args.push("--llm-model-name".to_string());
         args.push(llm_model_name);
+    }
+    if !prompt_template.trim().is_empty() {
+        args.push("--prompt-template".to_string());
+        args.push(prompt_template);
     }
 
     // 如果使用自定义 OpenAI ASR 接口，则追加参数
@@ -681,6 +725,8 @@ pub fn run() {
             check_dependencies,
             select_file,
             select_multiple_files,
+            select_document_files,
+            expand_document_paths,
             select_directory,
             expand_paths,
             start_transcription,

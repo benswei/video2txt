@@ -284,23 +284,26 @@ def run_local_cli_optimizer(text, command_template):
         print(f"⚠️ 调用本地 CLI 异常: {e}，将回退保存原始文本。", flush=True)
         return text
 
-def optimize_to_markdown(text, provider="gemini", api_url=None, api_key=None, model_name=None):
+def optimize_to_markdown(text, provider="gemini", api_url=None, api_key=None, model_name=None, prompt_template=None):
     """使用大模型（Gemini、自定义 OpenAI 兼容模型或本地 CLI）将转录文本整理优化为一篇高格式、有层级的 Markdown 篇章文章，保留90%以上的核心细节"""
     if provider == "cli":
         return run_local_cli_optimizer(text, api_url)
 
-    prompt = (
-        "你是一个极其专业的文章整理、编辑与排版专家。以下是一段视频/音频的原始语音转录文本。\n"
-        "请仔细阅读，并在【保留90%以上核心细节内容、观点、具体数据和关键论据】的前提下，将其整理、优化成一篇高质量、结构层次分明、排版美观的 Markdown 格式文章。\n\n"
-        "具体排版与内容要求如下：\n"
-        "1. 建立清晰的层级结构：必须使用 Markdown 标题（# 作为大标题，## 作为核心章节，### 作为子要点）对整篇内容进行逻辑分层，段落之间应有自然的过渡。\n"
-        "2. 重点突出：使用粗体（**双星号**）高亮标记关键概念、专有名词、核心观点或重要数据。\n"
-        "3. 列表与引用：适当使用无序列表（- 列表项）、有序列表或引用块（> 引用）来呈现要点、步骤或核心金句，提升可读性。\n"
-        "4. 核心细节保留：务必保留原文 90% 以上的实质性内容，切忌将长篇幅缩写为简短摘要，必须保留全部关键论据、背景事实、具体例子和数字。\n"
-        "5. 语言书面化：去除口头禅（如“然后”、“那么”、“呃”等）、重复累赘的词句，理顺句子语法，使文章流畅、通顺，呈现出专业撰稿人的水平。\n"
-        "6. 输出格式：只输出整理好的 Markdown 正文内容。严禁在开头或结尾输出 ```markdown 或 ``` 代码块包裹符，严禁输出任何“好的，以下是为您整理的文章”等废话前言或后记。\n\n"
-        f"原始转录文本：\n{text}"
-    )
+    if prompt_template and prompt_template.strip():
+        prompt = f"{prompt_template}\n\n原始转录文本：\n{text}"
+    else:
+        prompt = (
+            "你是一个极其专业的文章整理、编辑与排版专家。以下是一段视频/音频的原始语音转录文本。\n"
+            "请仔细阅读，并在【保留90%以上核心细节内容、观点、具体数据和关键论据】的前提下，将其整理、优化成一篇高质量、结构层次分明、排版美观的 Markdown 格式文章。\n\n"
+            "具体排版与内容要求如下：\n"
+            "1. 建立清晰的层级结构：必须使用 Markdown 标题（# 作为大标题，## 作为核心章节，### 作为子要点）对整篇内容进行逻辑分层，段落之间应有自然的过渡。\n"
+            "2. 重点突出：使用粗体（**双星号**）高亮标记关键概念、专有名词、核心观点或重要数据。\n"
+            "3. 列表与引用：适当使用无序列表（- 列表项）、有序列表或引用块（> 引用）来呈现要点、步骤或核心金句，提升可读性。\n"
+            "4. 核心细节保留：务必保留原文 90% 以上的实质性内容，切忌将长篇幅缩写为简短摘要，必须保留全部关键论据、背景事实、具体例子和数字。\n"
+            "5. 语言书面化：去除口头禅（如“然后”、“那么”、“呃”等）、重复累赘的词句，理顺句子语法，使文章流畅、通顺，呈现出专业撰稿人的水平。\n"
+            "6. 输出格式：只输出整理好的 Markdown 正文内容。严禁在开头或结尾输出 ```markdown 或 ``` 代码块包裹符，严禁输出任何“好的，以下是为您整理的文章”等废话前言或后记。\n\n"
+            f"原始转录文本：\n{text}"
+        )
 
     if provider == "gemini":
         api_key = api_key or get_api_key()
@@ -1026,13 +1029,18 @@ def transcribe_custom(audio_path, api_url, api_key, model_name):
 # ─── 多格式输出保存逻辑 ─────────────────────────────────────
 
 def save_outputs(text_or_result, output_base_path, formats, engine, source_input=None, video_title=None,
-                 llm_provider="gemini", llm_api_url=None, llm_api_key=None, llm_model_name=None):
+                 llm_provider="gemini", llm_api_url=None, llm_api_key=None, llm_model_name=None, prompt_template=None):
     """根据多选格式分别保存输出文件，并为 TXT 和 MD 格式写入下载信息头部"""
     formats_list = [f.strip().lower() for f in formats.split(",") if f.strip()]
     
     # 提前获取原始文本内容，用于优化 markdown
     raw_text = text_or_result.to_txt() if hasattr(text_or_result, 'to_txt') else str(text_or_result)
     
+    # 提前获取并缓存优化后的 markdown 文本，供 md/markdown 格式使用以及 html 格式转换使用
+    optimized_markdown = None
+    if "md" in formats_list or "markdown" in formats_list or "html" in formats_list:
+        optimized_markdown = optimize_to_markdown(raw_text, llm_provider, llm_api_url, llm_api_key, llm_model_name, prompt_template)
+
     for fmt in formats_list:
         # 计算该格式的具体输出文件路径
         base_no_ext, ext = os.path.splitext(output_base_path)
@@ -1045,7 +1053,6 @@ def save_outputs(text_or_result, output_base_path, formats, engine, source_input
 
         with open(out_path, "w", encoding="utf-8") as f:
             if fmt == "md" or fmt == "markdown":
-                optimized = optimize_to_markdown(raw_text, llm_provider, llm_api_url, llm_api_key, llm_model_name)
                 md_header = ""
                 if video_title or source_input:
                     title_display = video_title if video_title else "语音转文字文章"
@@ -1055,7 +1062,176 @@ def save_outputs(text_or_result, output_base_path, formats, engine, source_input
                     md_header += f"- **转录引擎**: {engine}\n"
                     md_header += f"- **生成时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
                     md_header += "---\n\n"
-                f.write(md_header + optimized)
+                f.write(md_header + (optimized_markdown if optimized_markdown else raw_text))
+            elif fmt == "html":
+                try:
+                    import markdown
+                except ImportError:
+                    print("📦 正在自动安装 markdown 库...", flush=True)
+                    try:
+                        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "markdown"], check=True)
+                        import markdown
+                    except Exception as e:
+                        print(f"❌ 安装 markdown 库失败: {e}，改用文本包装器。", flush=True)
+                        markdown = None
+
+                # 生成 HTML body
+                html_body = markdown.markdown(optimized_markdown) if (markdown and optimized_markdown) else (optimized_markdown if optimized_markdown else raw_text).replace("\n", "<br>")
+                title_display = video_title if video_title else "语音转文字文章"
+                
+                # Metadata block
+                meta_header = ""
+                if video_title or source_input:
+                    meta_header += f"<h1>{title_display}</h1>\n"
+                    meta_header += '<div class="meta-info">\n'
+                    if source_input:
+                        meta_header += f'    <span><strong>来源链接:</strong> <a href="{source_input}" target="_blank">{source_input}</a></span>\n'
+                    meta_header += f'    <span><strong>转录引擎:</strong> {engine}</span>\n'
+                    meta_header += f"    <span><strong>生成时间:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</span>\n"
+                    meta_header += '</div>\n'
+                else:
+                    meta_header += f"<h1>{title_display}</h1>\n"
+
+                # GORGEOUS HTML TEMPLATE
+                html_template = f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title_display}</title>
+    <style>
+        :root {{
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --heading-color: #1e293b;
+            --code-bg: #f1f5f9;
+        }}
+        @media (prefers-color-scheme: dark) {{
+            :root {{
+                --bg-color: #0f172a;
+                --text-color: #cbd5e1;
+                --card-bg: #1e293b;
+                --border-color: #334155;
+                --primary-color: #818cf8;
+                --heading-color: #f8fafc;
+                --code-bg: #0f172a;
+            }}
+        }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            padding: 2rem 1rem;
+            margin: 0;
+        }}
+        .container {{
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }}
+        h1, h2, h3, h4 {{
+            color: var(--heading-color);
+            margin-top: 1.8em;
+            margin-bottom: 0.8em;
+            font-weight: 700;
+        }}
+        h1 {{
+            font-size: 2.2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }}
+        h2 {{
+            font-size: 1.6rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.4rem;
+        }}
+        h3 {{
+            font-size: 1.25rem;
+        }}
+        p {{
+            margin-top: 0;
+            margin-bottom: 1.2em;
+        }}
+        a {{
+            color: var(--primary-color);
+            text-decoration: none;
+        }}
+        a:hover {{
+            text-decoration: underline;
+        }}
+        strong {{
+            color: var(--heading-color);
+        }}
+        ul, ol {{
+            margin-top: 0;
+            margin-bottom: 1.2em;
+            padding-left: 1.5rem;
+        }}
+        li {{
+            margin-bottom: 0.4em;
+        }}
+        blockquote {{
+            border-left: 4px solid var(--primary-color);
+            background-color: rgba(99, 102, 241, 0.05);
+            padding: 0.8rem 1.2rem;
+            margin: 1.5em 0;
+            border-radius: 0 8px 8px 0;
+            color: var(--text-color);
+        }}
+        code {{
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }}
+        pre {{
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5em 0;
+            border: 1px solid var(--border-color);
+        }}
+        pre code {{
+            padding: 0;
+            background: none;
+            font-size: 0.875em;
+        }}
+        .meta-info {{
+            font-size: 0.875rem;
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        {meta_header}
+        <div class="content">
+            {html_body}
+        </div>
+    </div>
+</body>
+</html>
+"""
+                f.write(html_template)
             elif hasattr(text_or_result, 'to_srt'):
                 # 含有时间戳的结构体 (Bcut ASRData 或 ParsedSubtitle 下载字幕)
                 if fmt == "srt":
@@ -1168,6 +1344,7 @@ def main():
     parser.add_argument("--llm-api-url", help="自定义大模型 API 端点 URL")
     parser.add_argument("--llm-api-key", help="自定义大模型 API Key")
     parser.add_argument("--llm-model-name", help="自定义大模型模型名称")
+    parser.add_argument("--prompt-template", help="自定义 AI 整理优化的 Prompt 提示词模板")
     
     # 代理配置
     parser.add_argument("--proxy", help="网络代理链接，如 http://127.0.0.1:7890")
@@ -1241,14 +1418,53 @@ def main():
                 print(f"❌ 文件不存在：{input_path}", file=sys.stderr)
                 sys.exit(1)
 
-            print(f"📁 本地文件：{input_path}", flush=True)
-            audio_path = extract_audio_from_local(input_path, tmpdir)
-
-            text_or_result, final_engine = run_transcription_with_fallback(args.engine, audio_path, args)
+            ext = os.path.splitext(input_path)[1].lower()
+            if ext in (".txt", ".srt", ".md", ".pdf"):
+                print(f"📄 检测到文本文件，直接进入 AI 整理优化流程：{input_path}", flush=True)
+                if ext == ".pdf":
+                    try:
+                        import pypdf
+                    except ImportError:
+                        print("📦 正在自动安装 pypdf 库...", flush=True)
+                        try:
+                            subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pypdf"], check=True)
+                            import pypdf
+                        except Exception as e:
+                            print(f"❌ 安装 pypdf 库失败: {e}", file=sys.stderr)
+                            sys.exit(1)
+                    
+                    try:
+                        reader = pypdf.PdfReader(input_path)
+                        raw_text = ""
+                        for page in reader.pages:
+                            page_text = page.extract_text()
+                            if page_text:
+                                raw_text += page_text + "\n"
+                        text_or_result = raw_text
+                    except Exception as e:
+                        print(f"❌ 读取 PDF 失败: {e}", file=sys.stderr)
+                        sys.exit(1)
+                elif ext == ".srt":
+                    entries = parse_subtitle_to_entries(input_path)
+                    if entries:
+                        text_or_result = " ".join([e['text'] for e in entries])
+                    else:
+                        with open(input_path, "r", encoding="utf-8", errors="ignore") as f:
+                            text_or_result = f.read()
+                else:
+                    with open(input_path, "r", encoding="utf-8", errors="ignore") as f:
+                        text_or_result = f.read()
+                
+                final_engine = "text_optimizer"
+            else:
+                print(f"📁 本地文件：{input_path}", flush=True)
+                audio_path = extract_audio_from_local(input_path, tmpdir)
+                text_or_result, final_engine = run_transcription_with_fallback(args.engine, audio_path, args)
 
         # 保存为选定的多格式文件
         save_outputs(text_or_result, output_path, args.formats, final_engine, source_input=args.input, video_title=title,
-                     llm_provider=args.llm_provider, llm_api_url=args.llm_api_url, llm_api_key=args.llm_api_key, llm_model_name=args.llm_model_name)
+                     llm_provider=args.llm_provider, llm_api_url=args.llm_api_url, llm_api_key=args.llm_api_key, llm_model_name=args.llm_model_name,
+                     prompt_template=args.prompt_template)
 
     print(f"\n✅ 转录流程全部完成！")
 

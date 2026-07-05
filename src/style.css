@@ -2134,5 +2134,132 @@ body.theme-light .win-btn:hover {
     color: #0f172a !important;
 }
 
+/* ─── 右侧任务进度与日志收缩栏 ─── */
+.task-progress-panel {
+    width: 340px;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.task-progress-panel.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* ─── 全局弹窗遮罩层 ─── */
+.modal-overlay-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content-wrapper {
+    width: 90%;
+    max-width: 720px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.modal-overlay-panel.active .modal-content-wrapper {
+    transform: scale(1);
+}
+
+.modal-close-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+    padding: 0;
+}
+
+.modal-close-btn:hover {
+    color: var(--error-color);
+}
+
+/* ─── 提示词模板列表样式 ─── */
+.template-item {
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.template-item:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+}
+
+.template-item.active {
+    background: var(--primary-grad);
+    border-color: transparent;
+    color: white;
+}
+
+/* 浅色模式适配 */
+body.theme-light .template-item {
+    background: rgba(0,0,0,0.02);
+}
+body.theme-light .template-item:hover {
+    background: rgba(0,0,0,0.04);
+    color: var(--text-primary);
+}
+body.theme-light .template-item.active {
+    background: var(--primary-grad);
+    color: white;
+}
+body.theme-light .modal-overlay-panel {
+    background: rgba(0, 0, 0, 0.2);
+}
+
 
 
